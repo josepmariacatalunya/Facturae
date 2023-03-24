@@ -5,9 +5,9 @@ VisualStudioVersion = 17.5.33424.131
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FacturaE", "Facturae\FacturaE.csproj", "{CFA51BB8-125F-4AE8-93D5-263407C0F309}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FirmaXadesNet", "..\FirmaXadesNet\FirmaXadesNet.csproj", "{84B87815-DD45-4C60-B343-C11D45847BDF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FirmaXadesNet", "FirmaXadesNet\FirmaXadesNet.csproj", "{84B87815-DD45-4C60-B343-C11D45847BDF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Xades", "..\Microsoft.Xades\Microsoft.Xades.csproj", "{EE1DC57A-344A-4B0A-82CE-5FD328C14894}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Xades", "Microsoft.Xades\Microsoft.Xades.csproj", "{EE1DC57A-344A-4B0A-82CE-5FD328C14894}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,6 +30,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {49858218-893A-4A7D-992C-9BF75D03146A}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Facturae\Facturae.csproj

@@ -161,11 +161,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\FirmaXadesNet\FirmaXadesNet.csproj">
+    <ProjectReference Include="..\FirmaXadesNet\FirmaXadesNet.csproj">
       <Project>{84b87815-dd45-4c60-b343-c11d45847bdf}</Project>
       <Name>FirmaXadesNet</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Microsoft.Xades\Microsoft.Xades.csproj">
+    <ProjectReference Include="..\Microsoft.Xades\Microsoft.Xades.csproj">
       <Project>{ee1dc57a-344a-4b0a-82ce-5fd328c14894}</Project>
       <Name>Microsoft.Xades</Name>
     </ProjectReference>
