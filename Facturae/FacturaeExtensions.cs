@@ -673,10 +673,11 @@ namespace FacturaE
 
             // Taxes Outputs
             var q = from tax in this.Items.SelectMany(x => x.TaxesOutputs)
-                    group tax by tax.TaxRate into g
+                    group tax by new { tax.TaxRate, tax.TaxTypeCode } into g
+                    where g.Key.TaxTypeCode == TaxTypeCodeType.Item01
                     select new TaxOutputType
                     {
-                        TaxRate     = g.Key,
+                        TaxRate     = g.Key.TaxRate,
                         TaxableBase = new AmountType 
                         { 
                             TotalAmount       = Math.Round(g.Sum(gtax => gtax.TaxableBase.TotalAmount), 2),
@@ -691,7 +692,27 @@ namespace FacturaE
                     };
 
             this.TaxesOutputs = q.ToList();
+            // Taxes Outputs
+            var r= from tax in this.Items.SelectMany(x => x.TaxesWithheld)
+                    group tax by new { tax.TaxRate, tax.TaxTypeCode } into g 
+                    where g.Key.TaxTypeCode == TaxTypeCodeType.Item04
+                    select new TaxType
+                    {
+                        TaxRate = g.Key.TaxRate,
+                        TaxableBase = new AmountType
+                        {
+                            TotalAmount = Math.Round(g.Sum(gtax => gtax.TaxableBase.TotalAmount), 2),
+                            EquivalentInEuros = Math.Round(g.Sum(gtax => gtax.TaxableBase.EquivalentInEuros), 2)
+                        },
+                        TaxAmount = new AmountType
+                        {
+                            TotalAmount = Math.Round(g.Sum(gtax => gtax.TaxAmount.TotalAmount), 2),
+                            EquivalentInEuros = Math.Round(g.Sum(gtax => gtax.TaxAmount.EquivalentInEuros), 2)
+                        },
+                        TaxTypeCode = g.Key.TaxTypeCode, // TaxTypeCodeType.Item01,
+                    };
 
+            this.TaxesWithheld = r.ToList();
             // Invoice totals
             this.InvoiceTotals = new InvoiceTotalsType();
 
@@ -771,8 +792,7 @@ namespace FacturaE
 
                         return total;
                     }
-                )
-            );
+                ), 2);
         }
 
         private void CalculateReimbursableExpensesTotals()
@@ -946,6 +966,24 @@ namespace FacturaE
 
             return this;
         }
+        public InvoiceLineType GiveTaxWithHeld(double taxRate)
+        {
+            if (this.taxesWithheldField == null)
+            {
+                this.taxesWithheldField = new List<TaxType>();
+            }
+
+            var taxwithheld = new TaxType
+            {
+                TaxTypeCode = TaxTypeCodeType.Item04
+              ,
+                TaxRate = taxRate
+            };
+
+            this.taxesWithheldField.Add(taxwithheld);
+
+            return this;
+        }
 
         public InvoiceType CalculateTotals()
         {
@@ -990,6 +1028,26 @@ namespace FacturaE
                     }
 
                     tax.TaxableBase.TotalAmount       = this.GrossAmount;
+                    tax.TaxableBase.EquivalentInEuros = this.GrossAmount;
+
+                    if (tax.TaxAmount == null)
+                    {
+                        tax.TaxAmount = new AmountType();
+                    }
+
+                    tax.TaxAmount.TotalAmount = Math.Round(tax.TaxableBase.TotalAmount * tax.TaxRate / 100, 2);
+                }
+            );
+            this.TaxesWithheld.ForEach
+            (
+                tax =>
+                {
+                    if (tax.TaxableBase == null)
+                    {
+                        tax.TaxableBase = new AmountType();
+                    }
+
+                    tax.TaxableBase.TotalAmount = this.GrossAmount;
                     tax.TaxableBase.EquivalentInEuros = this.GrossAmount;
 
                     if (tax.TaxAmount == null)

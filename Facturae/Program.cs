@@ -25,6 +25,7 @@ using FacturaE.Enums;
 using FacturaE.Extensions;
 using System;
 using System.Security.Cryptography.X509Certificates;
+using System.Security.Policy;
 
 namespace FacturaE
 {
@@ -101,6 +102,7 @@ namespace FacturaE
                         .GiveUnitPriceWithoutTax(100.01)
                         .GiveDiscount(10.01)
                         .GiveTax(18.00)
+                        .GiveTaxWithHeld(15)
                         .CalculateTotals()
                     .AddInvoiceItem("XXX", "XXX")
                         .AddDeliberyNotes("00002", DateTime.Now)
@@ -110,6 +112,7 @@ namespace FacturaE
                         .GiveUnitPriceWithoutTax(100.01)
                         .GiveDiscount(0)
                         .GiveTax(18.00)
+                        .GiveTaxWithHeld(15)
                         .CalculateTotals()
                     .CalculateTotals()
                 .CalculateTotals()
