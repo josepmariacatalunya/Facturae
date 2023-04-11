@@ -21,6 +21,7 @@
  * THE SOFTWARE.
  */
 
+using FacturaE.DataType;
 using FacturaE.Enums;
 using FacturaE.Xml;
 using FirmaXadesNet;
@@ -758,10 +759,15 @@ namespace FacturaE
                 this.InvoiceTotals.InvoiceTotal - (subsidyAmount + this.InvoiceTotals.TotalPaymentsOnAccount), 2
             );
 
-            this.InvoiceTotals.TotalExecutableAmount = Math.Round(this.InvoiceTotals.TotalOutstandingAmount
-                                                                - this.InvoiceTotals.TotalTaxesWithheld
-                                                                + this.InvoiceTotals.TotalReimbursableExpenses
-                                                                + this.InvoiceTotals.TotalFinancialExpenses, 2);
+            if (this.InvoiceTotals.AmountsWithheld != null)
+                this.InvoiceTotals.TotalExecutableAmount = Math.Round(this.InvoiceTotals.TotalOutstandingAmount
+                                                                              - this.InvoiceTotals.AmountsWithheld.WithholdingAmount 
+                                                                              + this.InvoiceTotals.TotalReimbursableExpenses
+                                                                              + this.InvoiceTotals.TotalFinancialExpenses, 2);
+            else
+                this.InvoiceTotals.TotalExecutableAmount = Math.Round(this.InvoiceTotals.TotalOutstandingAmount
+                                                              + this.InvoiceTotals.TotalReimbursableExpenses
+                                                              + this.InvoiceTotals.TotalFinancialExpenses, 2);
 
             return this.Parent;
         }
@@ -1267,6 +1273,65 @@ namespace FacturaE
             return this.Parent;
         }
 
+        /// <summary>
+        /// Sets an individual name spliting fullname into name and surnames
+        /// </summary>
+        /// <param name="individual">The individual</param>
+        /// <param name="name">The individual name</param>
+        /// <returns></returns>
+        public IndividualType SetFullName(string name)
+        {
+            if (name.Contains(","))
+            {
+                string[] surname1surname2name = name.Split(' ' , ',');
+                if (surname1surname2name.Length == 2)
+                {
+                    this.Name = surname1surname2name.LastOrDefault();
+                    this.FirstSurname = surname1surname2name.FirstOrDefault();
+                }
+                else if (surname1surname2name.Length == 3)
+                {
+                    this.Name = surname1surname2name.LastOrDefault();
+                    this.FirstSurname = surname1surname2name.FirstOrDefault();
+                    this.SecondSurname = surname1surname2name.ElementAt(1);
+                }
+                else if (surname1surname2name.Length == 4)
+                {
+                    this.Name = surname1surname2name.ElementAt(2) + " " + surname1surname2name.ElementAt(3);
+                    this.FirstSurname = surname1surname2name.ElementAt(0);
+                    this.SecondSurname = surname1surname2name.ElementAt(1);
+                }
+                else if (surname1surname2name.Length > 4)
+                {
+                    this.Name = surname1surname2name.ElementAt(3) + " " + surname1surname2name.ElementAt(4);
+                    this.FirstSurname = surname1surname2name.ElementAt(0);
+                    this.SecondSurname = surname1surname2name.ElementAt(1);
+                }
+            }
+            else
+            {
+                string[] namesurname1surname2 = name.Split(' ', ',');
+                if (namesurname1surname2.Length == 2)
+                {
+                    this.Name = namesurname1surname2.FirstOrDefault();
+                    this.FirstSurname = namesurname1surname2.LastOrDefault();
+                }
+                else if (namesurname1surname2.Length == 3)
+                {
+                    this.Name = namesurname1surname2.FirstOrDefault();
+                    this.FirstSurname = namesurname1surname2.ElementAt(1);
+                    this.SecondSurname = namesurname1surname2.LastOrDefault();
+                }
+                else if (namesurname1surname2.Length > 3)
+                {
+                    this.Name = namesurname1surname2.ElementAt(0) + " " + namesurname1surname2.ElementAt(1);
+                    this.FirstSurname = namesurname1surname2.ElementAt(2);
+                    this.SecondSurname = namesurname1surname2.ElementAt(3);
+                }
+            }
+
+            return this;
+        }
         /// <summary>
         /// Sets an individual name
         /// </summary>
