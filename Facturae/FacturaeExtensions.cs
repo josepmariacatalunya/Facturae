@@ -713,7 +713,8 @@ namespace FacturaE
                         TaxTypeCode = g.Key.TaxTypeCode, // TaxTypeCodeType.Item01,
                     };
 
-            this.TaxesWithheld = r.ToList();
+            if (this.TaxesWithheld != null)
+               this.TaxesWithheld = r.ToList();
             // Invoice totals
             this.InvoiceTotals = new InvoiceTotalsType();
 
@@ -974,6 +975,8 @@ namespace FacturaE
         }
         public InvoiceLineType GiveTaxWithHeld(double taxRate)
         {
+            if (taxRate ==  0) return this;
+
             if (this.taxesWithheldField == null)
             {
                 this.taxesWithheldField = new List<TaxType>();
@@ -1044,7 +1047,7 @@ namespace FacturaE
                     tax.TaxAmount.TotalAmount = Math.Round(tax.TaxableBase.TotalAmount * tax.TaxRate / 100, 2);
                 }
             );
-            this.TaxesWithheld.ForEach
+            this.TaxesWithheld?.ForEach
             (
                 tax =>
                 {

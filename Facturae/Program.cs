@@ -101,7 +101,7 @@ namespace FacturaE
                         .GiveUnitPriceWithoutTax(100.01)
                         .GiveDiscount(10.01)
                         .GiveTax(18.00)
-                        .GiveTaxWithHeld(15)
+                        .GiveTaxWithHeld(0)
                         .CalculateTotals()
                     .AddInvoiceItem("XXX", "XXX")
                         .AddDeliberyNotes("00002", DateTime.Now)
