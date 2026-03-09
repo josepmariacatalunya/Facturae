@@ -117,7 +117,7 @@ namespace FacturaE
                 .CalculateTotals()
                 .CreatePayments()
                 .SetPaymentDueDate(DateTime.Now)
-                .SetPaymentTransferencia("ES1212341234551234567890", "CAIXESXXXXX")
+                .SetPaymentTransferencia("ES1212341234551234567890", "CAIXESXXXXX",ItemChoiceType.AccountNumber)
                 .Validate()
                 .Sign()
                 .SaveToFile(@"Sample.xsig");

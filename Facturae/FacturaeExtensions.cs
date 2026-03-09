@@ -1877,14 +1877,16 @@ namespace FacturaE
 
             return this;
         }
-        public Facturae  SetPaymentTransferencia(string iban, string bic)
+        public Facturae  SetPaymentTransferencia(string iban, string bic, ItemChoiceType xmlelementattribute)
         {
             if (!string.IsNullOrEmpty(iban))
             {
                 var firstInvoice = facturae.Invoices[0];
                 var installment = firstInvoice.PaymentDetails.FirstOrDefault();
                 installment.PaymentMeans = PaymentMeansType.Item04;
+                
                 var accounttype = new AccountType();
+                accounttype.ItemElementName = xmlelementattribute;
                 accounttype.Item = iban;
                 accounttype.BIC = bic;
                 installment.AccountToBeCredited = accounttype;
